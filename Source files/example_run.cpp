@@ -24,10 +24,10 @@ int main() {
 void example_run_LDPC()
 {
 	unsigned nMaxIter = 8; // number of decoders
-	int M = 1000; // code word length
+	int N = 1000; // code word length
 	double rate = 1.0 / 3; // code rate
 
-	unsigned K = unsigned(ceil(M * rate)); // information length
+	unsigned K = unsigned(ceil(N * rate)); // information length
 
 	// instantiates a POLAR object
 	nrLDPC ldpc = nrLDPC(K, rate);
@@ -74,15 +74,15 @@ void example_run_LDPC()
 			assert(ldpc.checkSumCodeWord(enc));
 
 			//rate matching
-			vector<bool> rm_enc = ldpc.rateMatch(enc, M);
+			vector<bool> rm_enc = ldpc.rateMatch(enc, N);
 
 			// BPSK + AWGN
-			vector<double> r; r.reserve(M);
+			vector<double> r; r.reserve(N);
 			for (auto e : rm_enc)
 				r.push_back(1 - 2.0 * e + sqrt(N0[i] / 2.0) * norm_dist(random_engine));
 
 			// compute soft bits as LLR
-			vector<double> llr; llr.reserve(M);
+			vector<double> llr; llr.reserve(N);
 			for (auto e : r)
 				llr.push_back(4.0 * e / N0[i]);
 
@@ -124,7 +124,7 @@ void example_run_LDPC()
 	// print simulation result
 	cout << endl;
 	cout << "Modulation:" << "BPSK" << endl;
-	cout << "[M,R] = [ " << M << "," << rate << "]" << endl;
+	cout << "[N,R] = [ " << N << "," << rate << "]" << endl;
 	cout << "EsN0_dB = [";
 	for (auto e : EsN0_dB)
 		cout << e << " ";
